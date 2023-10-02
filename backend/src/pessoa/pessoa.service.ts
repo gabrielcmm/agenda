@@ -23,36 +23,14 @@ export class PessoaService {
     return { id_pessoa: pessoa.id_pessoa };
   }
 
-  async createPessoaFisica(
-    createPessoaFisicaDto: CreatePessoaFisicaDto,
-    id_pessoa: number,
-  ) {
-    const pessoaFisica = new PessoaFisica(createPessoaFisicaDto);
-    const pessoa = await this.pessoasRepository.findOneBy({
-      id_pessoa: id_pessoa,
-    });
-    if (pessoa) {
-      pessoaFisica.pessoa = pessoa;
-      await this.entityManager.save(pessoaFisica);
-    } else {
-      return HttpStatus.NOT_FOUND;
-    }
+  async createPF(createPessoaFisica: CreatePessoaFisicaDto) {
+    const pessoaFisica = new PessoaFisica(createPessoaFisica);
+    await this.entityManager.save(pessoaFisica);
   }
 
-  async createPessoaJuridica(
-    createPessoaJuridica: CreatePessoaJuridicaDto,
-    id_pessoa: number,
-  ) {
+  async createPJ(createPessoaJuridica: CreatePessoaJuridicaDto) {
     const pessoaJuridica = new PessoaJuridica(createPessoaJuridica);
-    const pessoa = await this.pessoasRepository.findOneBy({
-      id_pessoa: id_pessoa,
-    });
-    if (pessoa) {
-      pessoaJuridica.pessoa = pessoa;
-      await this.entityManager.save(pessoaJuridica);
-    } else {
-      return HttpStatus.NOT_FOUND;
-    }
+    await this.entityManager.save(pessoaJuridica);
   }
 
   async findAll() {

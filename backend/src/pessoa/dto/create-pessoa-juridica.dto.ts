@@ -4,5 +4,5 @@ export class CreatePessoaJuridicaDto {
   cnpj: number;
   responsavel: string;
   endereco: string;
-  foto_perfil: string;
+  foto_perfil?: string;
 }

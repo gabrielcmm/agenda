@@ -22,23 +22,14 @@ export class PessoaController {
     return this.pessoaService.create(createPessoaDto);
   }
 
-  @Post(':id/pessoa_fisica')
-  async createPessoaFisica(
-    @Param('id') id: string,
-    @Body() createPessoaFisicaDto: CreatePessoaFisicaDto,
-  ) {
-    return this.pessoaService.createPessoaFisica(createPessoaFisicaDto, +id);
+  @Post('/pessoa_fisica')
+  async createPF(@Body() createPessoaFisica: CreatePessoaFisicaDto) {
+    return this.pessoaService.createPF(createPessoaFisica);
   }
 
-  @Post(':id/pessoa_juridica')
-  async createPessoaJuridica(
-    @Param('id') id: string,
-    @Body() createPessoaJuridicaDto: CreatePessoaJuridicaDto,
-  ) {
-    return this.pessoaService.createPessoaJuridica(
-      createPessoaJuridicaDto,
-      +id,
-    );
+  @Post('/pessoa_juridica')
+  async createPJ(@Body() createPessoaJuridica: CreatePessoaJuridicaDto) {
+    return this.pessoaService.createPJ(createPessoaJuridica);
   }
 
   @Get()
