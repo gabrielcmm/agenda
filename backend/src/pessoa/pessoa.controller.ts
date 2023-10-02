@@ -37,6 +37,16 @@ export class PessoaController {
     return this.pessoaService.findAll();
   }
 
+  @Get('/pessoa_juridica')
+  async findAllJuridica() {
+    return this.pessoaService.findAllJuridica();
+  }
+
+  @Get('/pessoa_fisica')
+  async findAllFisica() {
+    return this.pessoaService.findAllFisica();
+  }
+
   @Get(':id')
   async findOne(@Param('id') id: string) {
     return this.pessoaService.findOne(+id);

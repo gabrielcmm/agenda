@@ -37,6 +37,18 @@ export class PessoaService {
     return this.pessoasRepository.find();
   }
 
+  async findAllJuridica() {
+    return this.entityManager.find(PessoaJuridica, {
+      relations: { pessoa: true },
+    });
+  }
+
+  async findAllFisica() {
+    return this.entityManager.find(PessoaFisica, {
+      relations: { pessoa: true },
+    });
+  }
+
   async findOne(id: number) {
     return this.pessoasRepository.findOneBy({ id_pessoa: id });
   }
