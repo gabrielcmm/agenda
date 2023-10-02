@@ -4,6 +4,10 @@ import { UpdatePessoaDto } from './dto/update-pessoa.dto';
 import { EntityManager, Repository } from 'typeorm';
 import { Pessoa } from './entities/pessoa.entity';
 import { InjectRepository } from '@nestjs/typeorm';
+import { PessoaFisica } from './entities/pessoa_fisica.entity';
+import { CreatePessoaFisicaDto } from './dto/create-pessoa-fisica.dto';
+import { CreatePessoaJuridicaDto } from './dto/create-pessoa-juridica.dto';
+import { PessoaJuridica } from './entities/pessoa_juridica.entity';
 
 @Injectable()
 export class PessoaService {
@@ -16,6 +20,39 @@ export class PessoaService {
   async create(createPessoaDto: CreatePessoaDto) {
     const pessoa = new Pessoa(createPessoaDto);
     await this.entityManager.save(pessoa);
+    return { id_pessoa: pessoa.id_pessoa };
+  }
+
+  async createPessoaFisica(
+    createPessoaFisicaDto: CreatePessoaFisicaDto,
+    id_pessoa: number,
+  ) {
+    const pessoaFisica = new PessoaFisica(createPessoaFisicaDto);
+    const pessoa = await this.pessoasRepository.findOneBy({
+      id_pessoa: id_pessoa,
+    });
+    if (pessoa) {
+      pessoaFisica.pessoa = pessoa;
+      await this.entityManager.save(pessoaFisica);
+    } else {
+      return HttpStatus.NOT_FOUND;
+    }
+  }
+
+  async createPessoaJuridica(
+    createPessoaJuridica: CreatePessoaJuridicaDto,
+    id_pessoa: number,
+  ) {
+    const pessoaJuridica = new PessoaJuridica(createPessoaJuridica);
+    const pessoa = await this.pessoasRepository.findOneBy({
+      id_pessoa: id_pessoa,
+    });
+    if (pessoa) {
+      pessoaJuridica.pessoa = pessoa;
+      await this.entityManager.save(pessoaJuridica);
+    } else {
+      return HttpStatus.NOT_FOUND;
+    }
   }
 
   async findAll() {

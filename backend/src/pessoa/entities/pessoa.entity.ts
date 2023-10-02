@@ -8,7 +8,7 @@ export class Pessoa {
   nome: string;
   @Column({ default: true })
   ativo: boolean;
-  @Column({ type: 'timestamptz' })
+  @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   data_criacao: Timestamp;
 
   constructor(partial: Partial<Pessoa>) {
