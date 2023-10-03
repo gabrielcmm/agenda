@@ -1,4 +1,7 @@
+import { Pessoa } from '../entities/pessoa.entity';
+
 export class CreatePessoaFisicaDto {
+  pessoa: Pessoa;
   email: string;
   data_nascimento: Date;
   sexo: string;

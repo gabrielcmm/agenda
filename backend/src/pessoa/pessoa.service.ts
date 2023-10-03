@@ -25,6 +25,7 @@ export class PessoaService {
 
   async createPF(createPessoaFisica: CreatePessoaFisicaDto) {
     const pessoaFisica = new PessoaFisica(createPessoaFisica);
+    console.log(pessoaFisica);
     await this.entityManager.save(pessoaFisica);
   }
 
@@ -34,18 +35,20 @@ export class PessoaService {
   }
 
   async findAll() {
-    return this.pessoasRepository.find();
+    return this.pessoasRepository.find({
+      relations: { pessoa_contatos: true },
+    });
   }
 
   async findAllJuridica() {
     return this.entityManager.find(PessoaJuridica, {
-      relations: { pessoa: true },
+      relations: { pessoa: { pessoa_contatos: true } },
     });
   }
 
   async findAllFisica() {
     return this.entityManager.find(PessoaFisica, {
-      relations: { pessoa: true },
+      relations: { pessoa: { pessoa_contatos: true } },
     });
   }
 

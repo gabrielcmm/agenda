@@ -1,4 +1,11 @@
-import { Column, Entity, PrimaryGeneratedColumn, Timestamp } from 'typeorm';
+import {
+  Column,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  Timestamp,
+} from 'typeorm';
+import { PessoaContatos } from './pessoa_contatos_entity';
 
 @Entity()
 export class Pessoa {
@@ -10,6 +17,9 @@ export class Pessoa {
   ativo: boolean;
   @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   data_criacao: Timestamp;
+
+  @OneToMany(() => PessoaContatos, (pc) => pc.pessoa, { cascade: true })
+  pessoa_contatos: PessoaContatos[];
 
   constructor(partial: Partial<Pessoa>) {
     Object.assign(this, partial);
