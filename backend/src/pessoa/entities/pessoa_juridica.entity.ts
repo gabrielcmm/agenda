@@ -24,7 +24,11 @@ export class PessoaJuridica {
   @Column({ nullable: true })
   foto_perfil: string;
 
-  @OneToOne(() => Pessoa, { cascade: true })
+  @OneToOne(() => Pessoa, {
+    cascade: true,
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE',
+  })
   @JoinColumn({ name: 'id_pessoa' })
   pessoa: Pessoa;
 

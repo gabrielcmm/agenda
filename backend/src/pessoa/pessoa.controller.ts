@@ -8,7 +8,6 @@ import {
   Delete,
 } from '@nestjs/common';
 import { PessoaService } from './pessoa.service';
-import { CreatePessoaDto } from './dto/create-pessoa.dto';
 import { UpdatePessoaDto } from './dto/update-pessoa.dto';
 import { CreatePessoaFisicaDto } from './dto/create-pessoa-fisica.dto';
 import { CreatePessoaJuridicaDto } from './dto/create-pessoa-juridica.dto';
@@ -16,11 +15,6 @@ import { CreatePessoaJuridicaDto } from './dto/create-pessoa-juridica.dto';
 @Controller('pessoa')
 export class PessoaController {
   constructor(private readonly pessoaService: PessoaService) {}
-
-  @Post()
-  async create(@Body() createPessoaDto: CreatePessoaDto) {
-    return this.pessoaService.create(createPessoaDto);
-  }
 
   @Post('/pessoa_fisica')
   async createPF(@Body() createPessoaFisica: CreatePessoaFisicaDto) {
@@ -33,8 +27,8 @@ export class PessoaController {
   }
 
   @Get()
-  async findAll() {
-    return this.pessoaService.findAll();
+  async findAllPessoas() {
+    return this.pessoaService.findAllPessoas();
   }
 
   @Get('/pessoa_juridica')
@@ -47,9 +41,30 @@ export class PessoaController {
     return this.pessoaService.findAllFisica();
   }
 
-  @Get(':id')
-  async findOne(@Param('id') id: string) {
-    return this.pessoaService.findOne(+id);
+  @Get('/pessoa_juridica/:id')
+  async findOneJuridica(@Param('id') id: string) {
+    return this.pessoaService.findOneJuridica(id);
+  }
+
+  @Get('/pessoa_fisica/:id')
+  async findOneFisica(@Param('id') id: string) {
+    return this.pessoaService.findOneFisica(id);
+  }
+
+  @Patch('/pessoa_juridica/:id')
+  async updatePJ(
+    @Param('id') id: string,
+    @Body() updatePessoaJuridicaDto: CreatePessoaJuridicaDto,
+  ) {
+    return this.pessoaService.updatePJ(id, updatePessoaJuridicaDto);
+  }
+
+  @Patch('/pessoa_fisica/:id')
+  async updatePF(
+    @Param('id') id: string,
+    @Body() updatePessoaFisicaDto: CreatePessoaFisicaDto,
+  ) {
+    return this.pessoaService.updatePF(id, updatePessoaFisicaDto);
   }
 
   @Patch(':id')

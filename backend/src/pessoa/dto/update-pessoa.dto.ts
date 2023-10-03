@@ -1,3 +1,3 @@
-export class UpdatePessoaDto {
-  ativo: boolean;
-}
+import { CreatePessoaDto } from './create-pessoa.dto';
+
+export class UpdatePessoaDto extends CreatePessoaDto {}

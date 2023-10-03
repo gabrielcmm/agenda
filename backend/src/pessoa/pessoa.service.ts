@@ -1,5 +1,4 @@
 import { HttpStatus, Injectable } from '@nestjs/common';
-import { CreatePessoaDto } from './dto/create-pessoa.dto';
 import { UpdatePessoaDto } from './dto/update-pessoa.dto';
 import { EntityManager, Repository } from 'typeorm';
 import { Pessoa } from './entities/pessoa.entity';
@@ -8,6 +7,7 @@ import { PessoaFisica } from './entities/pessoa_fisica.entity';
 import { CreatePessoaFisicaDto } from './dto/create-pessoa-fisica.dto';
 import { CreatePessoaJuridicaDto } from './dto/create-pessoa-juridica.dto';
 import { PessoaJuridica } from './entities/pessoa_juridica.entity';
+import { PessoaContatos } from './entities/pessoa_contatos_entity';
 
 @Injectable()
 export class PessoaService {
@@ -17,43 +17,53 @@ export class PessoaService {
     private readonly entityManager: EntityManager,
   ) {}
 
-  async create(createPessoaDto: CreatePessoaDto) {
-    const pessoa = new Pessoa(createPessoaDto);
-    await this.entityManager.save(pessoa);
-    return { id_pessoa: pessoa.id_pessoa };
-  }
-
   async createPF(createPessoaFisica: CreatePessoaFisicaDto) {
     const pessoaFisica = new PessoaFisica(createPessoaFisica);
-    console.log(pessoaFisica);
     await this.entityManager.save(pessoaFisica);
+    return pessoaFisica;
   }
 
   async createPJ(createPessoaJuridica: CreatePessoaJuridicaDto) {
     const pessoaJuridica = new PessoaJuridica(createPessoaJuridica);
     await this.entityManager.save(pessoaJuridica);
+    return pessoaJuridica;
   }
 
-  async findAll() {
-    return this.pessoasRepository.find({
-      relations: { pessoa_contatos: true },
-    });
+  async findAllPessoas() {
+    const fisicas = await this.findAllJuridica();
+    const juridicas = await this.findAllJuridica();
+
+    return { fisicas, juridicas };
   }
 
   async findAllJuridica() {
     return this.entityManager.find(PessoaJuridica, {
-      relations: { pessoa: { pessoa_contatos: true } },
+      relations: ['pessoa.pessoa_contatos.contato'],
     });
   }
 
   async findAllFisica() {
     return this.entityManager.find(PessoaFisica, {
-      relations: { pessoa: { pessoa_contatos: true } },
+      relations: ['pessoa.pessoa_contatos.contato'],
     });
   }
 
-  async findOne(id: number) {
-    return this.pessoasRepository.findOneBy({ id_pessoa: id });
+  async findOneJuridica(id: string) {
+    const pessoa = await this.entityManager.findOne(PessoaJuridica, {
+      where: [{ id_pessoa_juridica: id }],
+      relations: ['pessoa.pessoa_contatos.contato'],
+    });
+    console.log(pessoa);
+    return pessoa;
+  }
+
+  async findOneFisica(id: string) {
+    const pessoa = await this.entityManager.findOne(PessoaFisica, {
+      where: [{ id_pessoa_fisica: id }],
+      relations: ['pessoa.pessoa_contatos.contato'],
+    });
+    console.log(pessoa);
+    return pessoa;
   }
 
   async update(id: number, updatePessoaDto: UpdatePessoaDto) {
@@ -61,11 +71,43 @@ export class PessoaService {
     if (!pessoa) {
       return HttpStatus.NOT_FOUND;
     } else {
-      pessoa.ativo = updatePessoaDto.ativo;
-      await this.entityManager.save(pessoa);
+      await this.entityManager.save(updatePessoaDto);
       return {
         message: `${pessoa.nome} atualizada com sucesso!, ele está : ${pessoa.ativo}`,
       };
+    }
+  }
+
+  async updatePF(id: string, updatePessoaFisicaDto: CreatePessoaFisicaDto) {
+    const pessoa = await this.findOneFisica(id);
+    console.log(pessoa);
+    console.log(updatePessoaFisicaDto);
+    if (!pessoa) {
+      return HttpStatus.NOT_FOUND;
+    } else {
+      await this.entityManager.update(PessoaFisica, id, {
+        ...pessoa,
+        ...updatePessoaFisicaDto,
+      });
+      return {
+        message: `${pessoa.pessoa.nome} atualizada com sucesso! \n ${updatePessoaFisicaDto}`,
+      };
+    }
+  }
+
+  async updatePJ(id: string, updatePessoaJuridicaDto: CreatePessoaJuridicaDto) {
+    const pessoa = await this.entityManager.findOneBy(PessoaJuridica, {
+      id_pessoa_juridica: id,
+    });
+    if (!pessoa) {
+      return HttpStatus.NOT_FOUND;
+    } else {
+      console.log(pessoa);
+      await this.entityManager.update(
+        PessoaJuridica,
+        id,
+        updatePessoaJuridicaDto,
+      );
     }
   }
 

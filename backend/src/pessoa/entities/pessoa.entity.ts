@@ -18,7 +18,7 @@ export class Pessoa {
   @Column({ type: 'timestamptz', default: () => 'CURRENT_TIMESTAMP' })
   data_criacao: Timestamp;
 
-  @OneToMany(() => PessoaContatos, (pc) => pc.pessoa, { cascade: true })
+  @OneToMany(() => PessoaContatos, (pc) => pc.pessoa)
   pessoa_contatos: PessoaContatos[];
 
   constructor(partial: Partial<Pessoa>) {
