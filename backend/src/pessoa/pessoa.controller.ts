@@ -75,8 +75,17 @@ export class PessoaController {
     return this.pessoaService.update(+id, updatePessoaDto);
   }
 
+  @Delete('/pessoa_fisica/:id')
+  async removePF(@Param('id') id: string) {
+    return this.pessoaService.removePF(id);
+  }
+  @Delete('/pessoa_juridica/:id')
+  async removePJ(@Param('id') id: string) {
+    return this.pessoaService.removePJ(id);
+  }
+
   @Delete(':id')
-  async remove(@Param('id') id: string) {
-    return this.pessoaService.remove(+id);
+  async removePessoa(@Param('id') id: string) {
+    return this.pessoaService.removePessoa(+id);
   }
 }

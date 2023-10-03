@@ -7,7 +7,6 @@ import { PessoaFisica } from './entities/pessoa_fisica.entity';
 import { CreatePessoaFisicaDto } from './dto/create-pessoa-fisica.dto';
 import { CreatePessoaJuridicaDto } from './dto/create-pessoa-juridica.dto';
 import { PessoaJuridica } from './entities/pessoa_juridica.entity';
-import { PessoaContatos } from './entities/pessoa_contatos_entity';
 
 @Injectable()
 export class PessoaService {
@@ -30,7 +29,7 @@ export class PessoaService {
   }
 
   async findAllPessoas() {
-    const fisicas = await this.findAllJuridica();
+    const fisicas = await this.findAllFisica();
     const juridicas = await this.findAllJuridica();
 
     return { fisicas, juridicas };
@@ -111,7 +110,17 @@ export class PessoaService {
     }
   }
 
-  async remove(id: number) {
-    return this.pessoasRepository.delete({ id_pessoa: id });
+  async removePF(id: string) {
+    return this.entityManager.delete(PessoaFisica, { id_pessoa_fisica: id });
+  }
+
+  async removePJ(id: string) {
+    return this.entityManager.delete(PessoaJuridica, {
+      id_pessoa_juridica: id,
+    });
+  }
+
+  async removePessoa(id: number) {
+    return this.entityManager.delete(Pessoa, { id_pessoa: id });
   }
 }
