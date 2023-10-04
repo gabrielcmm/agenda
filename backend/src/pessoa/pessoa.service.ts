@@ -52,7 +52,6 @@ export class PessoaService {
       where: [{ id_pessoa_juridica: id }],
       relations: ['pessoa.pessoa_contatos.contato'],
     });
-    console.log(pessoa);
     return pessoa;
   }
 
@@ -61,7 +60,6 @@ export class PessoaService {
       where: [{ id_pessoa_fisica: id }],
       relations: ['pessoa.pessoa_contatos.contato'],
     });
-    console.log(pessoa);
     return pessoa;
   }
 
@@ -79,8 +77,6 @@ export class PessoaService {
 
   async updatePF(id: string, updatePessoaFisicaDto: CreatePessoaFisicaDto) {
     const pessoa = await this.findOneFisica(id);
-    console.log(pessoa);
-    console.log(updatePessoaFisicaDto);
     if (!pessoa) {
       return HttpStatus.NOT_FOUND;
     } else {
@@ -101,7 +97,6 @@ export class PessoaService {
     if (!pessoa) {
       return HttpStatus.NOT_FOUND;
     } else {
-      console.log(pessoa);
       await this.entityManager.update(
         PessoaJuridica,
         id,

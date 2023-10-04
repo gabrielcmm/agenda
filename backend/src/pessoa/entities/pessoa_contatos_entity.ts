@@ -10,17 +10,9 @@ export class PessoaContatos {
   @Column()
   descricao: string;
 
-  @ManyToOne(() => Pessoa, (p) => p.pessoa_contatos, {
-    cascade: true,
-    onUpdate: 'CASCADE',
-    onDelete: 'CASCADE',
-  })
+  @ManyToOne(() => Pessoa, (p) => p.pessoa_contatos)
   pessoa: Pessoa;
 
-  @ManyToOne(() => Contato, (c) => c.pessoa_contatos, {
-    cascade: true,
-    onUpdate: 'CASCADE',
-    onDelete: 'CASCADE',
-  })
+  @ManyToOne(() => Contato, (c) => c.pessoa_contatos)
   contato: Contato;
 }
