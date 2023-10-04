@@ -94,14 +94,25 @@ export class PessoaService {
     const pessoa = await this.entityManager.findOneBy(PessoaJuridica, {
       id_pessoa_juridica: id,
     });
+
     if (!pessoa) {
       return HttpStatus.NOT_FOUND;
     } else {
-      await this.entityManager.update(
-        PessoaJuridica,
-        id,
-        updatePessoaJuridicaDto,
-      );
+      const updatedContatos = {
+        ...pessoa.pessoa?.pessoa_contatos,
+        ...updatePessoaJuridicaDto.pessoa.pessoa_contatos,
+      };
+      const updatedPessoa = {
+        ...pessoa.pessoa,
+        ...updatePessoaJuridicaDto.pessoa,
+      };
+      updatedPessoa.pessoa_contatos = updatedContatos;
+
+      await this.entityManager.save(PessoaJuridica, {
+        ...updatedPessoa,
+        ...updatePessoaJuridicaDto,
+        id_pessoa_juridica: id,
+      });
     }
   }
 
