@@ -76,21 +76,6 @@ export class PessoaService {
         id_pessoa: pessoa.pessoa.id_pessoa,
       };
 
-      // console.log(pessoa.pessoa.pessoa_contatos);
-
-      // pessoa.pessoa.pessoa_contatos.map((contato, index) => {
-      //   const newContato = {
-      //     ...contato,
-      //     ...updatePessoaFisica.pessoa.pessoa_contatos[index],
-      //     contato: updatePessoaFisica.pessoa.pessoa_contatos[index].contato,
-      //     id_pessoa_contatos: contato.id_pessoa_contatos,
-      //   };
-      //   return new PessoaContatos(newContato);
-
-      //   // return newContato;
-      // });
-      // console.log(pessoa.pessoa.pessoa_contatos);
-
       const updatedPessoaFisica = {
         ...pessoa,
         ...updatePessoaFisica,
@@ -106,12 +91,8 @@ export class PessoaService {
 
       await this.entityManager.save(pessoa);
 
-      const contatosSemPessoa = await this.entityManager.find(PessoaContatos, {
-        where: { pessoa: IsNull() },
-      });
-      if (contatosSemPessoa.length > 0)
-        await this.entityManager.delete(PessoaContatos, contatosSemPessoa);
-      return pessoa;
+      await this.entityManager.delete(PessoaContatos, { pessoa: IsNull() });
+      return this.findOneFisica(id);
     }
   }
 
@@ -144,6 +125,8 @@ export class PessoaService {
 
       await this.entityManager.save(pessoa);
     }
+    await this.entityManager.delete(PessoaContatos, { pessoa: IsNull() });
+    return this.findOneJuridica(id);
   }
 
   async removePF(id: string) {
