@@ -8,7 +8,6 @@ import {
   Delete,
 } from '@nestjs/common';
 import { PessoaService } from './pessoa.service';
-import { UpdatePessoaDto } from './dto/update-pessoa.dto';
 import { CreatePessoaFisicaDto } from './dto/create-pessoa-fisica.dto';
 import { CreatePessoaJuridicaDto } from './dto/create-pessoa-juridica.dto';
 
@@ -65,14 +64,6 @@ export class PessoaController {
     @Body() updatePessoaFisicaDto: CreatePessoaFisicaDto,
   ) {
     return this.pessoaService.updatePF(id, updatePessoaFisicaDto);
-  }
-
-  @Patch(':id')
-  async update(
-    @Param('id') id: string,
-    @Body() updatePessoaDto: UpdatePessoaDto,
-  ) {
-    return this.pessoaService.update(+id, updatePessoaDto);
   }
 
   @Delete('/pessoa_fisica/:id')

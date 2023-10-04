@@ -15,4 +15,8 @@ export class PessoaContatos {
 
   @ManyToOne(() => Contato, (c) => c.pessoa_contatos)
   contato: Contato;
+
+  constructor(partial: Partial<PessoaContatos>) {
+    Object.assign(this, partial);
+  }
 }
