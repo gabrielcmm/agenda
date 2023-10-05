@@ -5,7 +5,7 @@ import { useEffect } from 'react'
 export default function Home() {
 
   useEffect(() => {
-    fetch('http://localhost:3333/api/pessoas')
+    fetch('http://localhost:3333/api/pessoa')
       .then(response => response.json())
       .then(data => console.log(data))
 
