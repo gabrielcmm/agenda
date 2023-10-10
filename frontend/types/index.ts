@@ -38,3 +38,5 @@ export type PessoaJuridica = {
 }
 
 export type Pessoas = (PessoaFisica | PessoaJuridica)[];
+
+export type PessoaGeneral = (PessoaFisica | PessoaJuridica)
